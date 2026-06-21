@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? "http://127.0.0.1:8000" : "");
+
 const safeLocalStorage = {
   getItem(key) {
     try {
@@ -670,7 +672,7 @@ function InvestigationPhasesCard({ extractedData, reportUrl }) {
       {reportUrl && (
         <div style={{ marginTop: '16px' }}>
           <a 
-            href={`http://127.0.0.1:8000${reportUrl}`} 
+            href={`${API_BASE_URL}${reportUrl}`} 
             target="_blank" 
             rel="noreferrer" 
             style={{
@@ -2690,7 +2692,7 @@ function MyReportsSection({ onBack }) {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/chat/reports");
+        const response = await fetch(`${API_BASE_URL}/api/chat/reports`);
         if (!response.ok) {
           throw new Error("Failed to load reports from server.");
         }
@@ -2862,7 +2864,7 @@ function MyReportsSection({ onBack }) {
 
               <div style={{ display: "flex", gap: "10px" }}>
                 <a 
-                  href={`http://127.0.0.1:8000${selectedReport.report_url}`} 
+                  href={`${API_BASE_URL}${selectedReport.report_url}`} 
                   target="_blank" 
                   rel="noreferrer"
                   className="assessor-btn"
@@ -2899,7 +2901,7 @@ function MyReportsSection({ onBack }) {
             {/* Embedded PDF Viewer Iframe */}
             <div style={{ flexGrow: 1, borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(102, 161, 255, 0.16)", background: "#111b27" }}>
               <iframe
-                src={`http://127.0.0.1:8000${selectedReport.report_url}#toolbar=1`}
+                src={`${API_BASE_URL}${selectedReport.report_url}#toolbar=1`}
                 width="100%"
                 height="100%"
                 title="Complaint Report PDF"
@@ -3362,7 +3364,7 @@ How can I assist you today? Please feel free to describe any cyber incident in y
   // Syncing function checking /extract API and updating visual progress metrics
   const syncExtractionData = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/chat/extract", {
+      const response = await fetch(`${API_BASE_URL}/api/chat/extract`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ session_id: sessionId })
@@ -3405,7 +3407,7 @@ How can I assist you today? Please feel free to describe any cyber incident in y
 
     try {
       // 2. Query chat endpoint
-      const response = await fetch("http://127.0.0.1:8000/api/chat", {
+      const response = await fetch(`${API_BASE_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage, session_id: sessionId })
@@ -3443,7 +3445,7 @@ How can I assist you today? Please feel free to describe any cyber incident in y
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/chat/upload", {
+      const response = await fetch(`${API_BASE_URL}/api/chat/upload`, {
         method: "POST",
         body: formData
       });
